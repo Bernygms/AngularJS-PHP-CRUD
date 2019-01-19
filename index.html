@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" >
+<meta http-equiv="X-UA-Compatible" content="IE-edge" >
+<title>Proyecto Angular JS CRUD</title>
+<link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+</head>
+<body ng-app="crud">
+	<!--Start Angular controller-->
+	<div ng-controller="crudController">
+		<!--Start Container-->
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12">
+					<h1><li class="fab fa-angular"></li>Angular JS CRUD</h1>					
+				</div>					
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<div class="pull-right">
+						<button class="btn btn-success" data-toggle="modal" data-target="#add_nuw_cliente"><li class="fas fa-plus-circle"></li> Nuevo Cliente</button>
+					</div>				
+				</div>					
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<h1><li class="fas fa-boxes"></li>Clientes</h1>		
+					<table class="table table-bordered table-responsive table-striped" >
+						<tr>
+							<td>ID</td>
+							<td>USUARIO</td>
+							<td>PASSWORD</td>
+							<td>PRIVILEGIOS</td>
+							<td>ACCION</td>
+						</tr>
+						<tr ng-repeat="cat in usuarios" >
+							<td>{{cat.id_usuario}}</td>
+							<td>{{cat.username_usuario}}</td>
+							<td>{{cat.password_usuario}}</td>
+							<td ng-if="cat.privilegio_usuario == 1">Activo</td>
+							<td ng-if="cat.privilegio_usuario == 0">Inactivo </td>
+							<td>
+								<button ng-click="getUser($index)" class=" btn btn-primary btn-xs" ><li class="fas fa-pencil-alt"></li>Editar</button>
+								<button ng-click="deleteUser($index)" class=" btn btn-danger btn-xs" ><li class="fas fa-trash"></li>Eliminar</button>
+							</td>							
+						</tr>
+					</table>
+				</div>					
+			</div>
+		</div>
+		<!--End Container-->
+					<!-- Bootstrap Modals -->
+   
+		    <div class="modal fade" id="add_nuw_cliente" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+		        <div class="modal-dialog" role="document">
+		            <div class="modal-content">
+		                <div class="modal-header">
+		                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+		                            aria-hidden="true">&times;</span></button>
+		                    <h4 class="modal-title" id="myModalLabel">Nuevo Cliente</h4>
+		                </div>
+		                <div class="modal-body">
+		 
+		                	 <ul class="alert alert-danger" ng-if="errors.length > 0">
+		                        <li ng-repeat="error in errors">
+		                        	{{ error }}
+		                        </li>
+		                     </ul>
+		 					<div class="form-group">
+		                        <label for="id">Identificador</label>
+		                        <input ng-model="usuario.id" type="text" id="id" class="form-control"/>
+		                    </div>
+
+		                    <div class="form-group">
+		                        <label for="usuario">Usuario</label>
+		                        <input ng-model="usuario.username" type="text" id="username" class="form-control"/>
+		                    </div>
+		 
+		                    <div class="form-group">
+		                        <label for="password">Password</label>
+		                        <input ng-model="usuario.password" class="form-control" name="password"></input>
+		                    </div>
+
+		                    <div class="form-group">
+		                        <label for="privilegios">Privilegios</label>
+		                        <input ng-model="usuario.privilegios" class="form-control" name="privilegios"></input>
+		                    </div>
+		 
+		                </div>
+		                <div class="modal-footer">
+		                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+		                    <button type="button" class="btn btn-primary" ng-click="addUser()">Guardar Cliente</button>
+		                </div>
+		            </div>
+		        </div>
+		    </div>
+			<!-- Modal - End Add -->
+	
+			<!-- Modal - Update -->
+		    <div class="modal fade" id="modal_update" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+		        <div class="modal-dialog" role="document">
+		            <div class="modal-content">
+		                <div class="modal-header">
+		                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+		                            aria-hidden="true">&times;</span></button>
+		                    <h4 class="modal-title" id="myModalLabel">Editar Cliente</h4>
+		                </div>
+		                <div class="modal-body">
+		 
+		                	 <ul class="alert alert-danger" ng-if="errors.length > 0">
+		                        <li ng-repeat="error in errors">
+		                        	{{ error }}
+		                        </li>
+		                     </ul>
+		 					<div class="form-group">
+		                        <label for="id">Identificador</label>
+		                        <input ng-model="destalles_usuario.id_usuario" type="text" id="id" class="form-control"/>
+		                    </div>
+
+		                    <div class="form-group">
+		                        <label for="usuario">Usuario</label>
+		                        <input ng-model="destalles_usuario.username_usuario" type="text" id="username" class="form-control"/>
+		                    </div>
+		 
+		                    <div class="form-group">
+		                        <label for="password">Password</label>
+		                        <input ng-model="destalles_usuario.password_usuario" class="form-control" name="password"></input>
+		                    </div>
+
+		                    <div class="form-group">
+		                        <label for="privilegios">Privilegios</label>
+		                        <input ng-model="destalles_usuario.privilegio_usuario" class="form-control" name="privilegios"></input>
+		                    </div>
+		 
+		                </div>
+		                <div class="modal-footer">
+		                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+		                    <button type="button" class="btn btn-primary" ng-click="updateUser()">Guardar Cambios</button>
+		                </div>
+		            </div>
+		        </div>
+		    </div>
+		    <!--Modal - End Update-->
+	</div>
+	<!--End Angular Controller-->
+	<script type="text/javascript" src="lib/jquery-3.3.1.min.js"></script>
+	<script type="text/javascript" src="lib/angular.min.js"></script>
+	<script type="text/javascript" src="lib/angular-resource.min.js"></script>
+	<script type="text/javascript" src="lib/angular-touch.min.js" ></script>
+	<script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="lib/app.js"></script>
+</body>
+
+</html>
